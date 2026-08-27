@@ -1,0 +1,22 @@
+.DS_Store
+.swiftpm/
+apps/macos/.build/
+apps/macos/build/
+release/**/*.zip
+release/**/*.app/
+
+# Local Codex project memory and historical workspace views
+AGENTS.md
+plan.md
+progress.md
+decision.md
+bug.md
+handoff.md
+glossary.md
+项目总览.html
+
+# Private and out-of-scope concept material
+apps/ios/
+shared/
+design/prototypes/
+design/brand/hover-list-logo-concepts-v1.png

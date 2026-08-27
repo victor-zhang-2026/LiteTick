@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BuildNumber</key>
+	<integer>14</integer>
+	<key>MarketingVersion</key>
+	<string>1.0.0</string>
+	<key>ReleaseChannel</key>
+	<string>rc</string>
+</dict>
+</plist>
