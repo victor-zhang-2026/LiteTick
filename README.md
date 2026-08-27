@@ -32,7 +32,7 @@ Floating Desktop Checklist. Native macOS, local storage, no account, and no netw
 - 解压后，将 `LiteTick.app` 拖入“应用程序”。
 - 尝试打开一次。如果 macOS 阻止运行，请打开“系统设置 → 隐私与安全性”，在“安全性”区域选择“仍要打开”，再次确认。
 
----
+—
 
 - Download `LiteTick-1.0.0-rc.1-macOS-arm64.zip` from GitHub Releases.
 - Unzip it and drag `LiteTick.app` into Applications.
