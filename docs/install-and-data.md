@@ -9,21 +9,23 @@
 
 LiteTick 不使用安装器。解压 Release ZIP，将 `LiteTick.app` 拖入 `/Applications` 即可。技术上可以从其他目录运行，但放入“应用程序”更便于升级和管理。
 
+---
+
 LiteTick does not use an installer. Unzip the release archive and drag `LiteTick.app` into `/Applications`. It can run elsewhere, but Applications is recommended for predictable upgrades and management.
 
-### 未公证候选版 / Unnotarized release candidate
+`1.0.0-rc.1` 尚未使用 Apple Developer ID 签名或公证。首次尝试打开后，如 macOS 阻止运行，请按以下步骤处理：
 
-`1.0.0-rc.1` 尚未使用 Apple Developer ID 签名或公证。首次尝试打开后，如 macOS 阻止运行：
+- 打开“系统设置 → 隐私与安全性”。
+- 在“安全性”区域选择“仍要打开”。
+- 再次确认打开。
 
-1. 打开“系统设置 → 隐私与安全性”。
-2. 在“安全性”区域选择“仍要打开”。
-3. 再次确认打开。
+---
 
-`1.0.0-rc.1` is not yet signed with Apple Developer ID or notarized. After the first blocked launch attempt:
+`1.0.0-rc.1` is not yet signed with Apple Developer ID or notarized. After the first blocked launch attempt, do this:
 
-1. Open System Settings → Privacy & Security.
-2. In Security, choose Open Anyway.
-3. Confirm Open.
+- Open System Settings → Privacy & Security.
+- In Security, choose Open Anyway.
+- Confirm Open.
 
 Apple warns that bypassing this protection carries risk. Only proceed for an archive downloaded from the official repository whose SHA-256 checksum matches the release manifest. See [Apple Support](https://support.apple.com/en-us/102445).
 

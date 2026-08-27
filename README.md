@@ -28,23 +28,20 @@ Floating Desktop Checklist. Native macOS, local storage, no account, and no netw
 
 ## 安装 / Install
 
-### 中文
+- 从 GitHub Releases 下载 `LiteTick-1.0.0-rc.1-macOS-arm64.zip`。
+- 解压后，将 `LiteTick.app` 拖入“应用程序”。
+- 尝试打开一次。如果 macOS 阻止运行，请打开“系统设置 → 隐私与安全性”，在“安全性”区域选择“仍要打开”，再次确认。
 
-1. 从 GitHub Releases 下载 `LiteTick-1.0.0-rc.1-macOS-arm64.zip`。
-2. 解压后，将 `LiteTick.app` 拖入“应用程序”。
-3. 尝试打开一次。如果 macOS 阻止运行，请打开“系统设置 → 隐私与安全性”，在“安全性”区域选择“仍要打开”，再次确认。
+---
 
-### English
+- Download `LiteTick-1.0.0-rc.1-macOS-arm64.zip` from GitHub Releases.
+- Unzip it and drag `LiteTick.app` into Applications.
+- Try to open it once. If macOS blocks it, open System Settings → Privacy & Security, choose Open Anyway in Security, and confirm.
 
-1. Download `LiteTick-1.0.0-rc.1-macOS-arm64.zip` from GitHub Releases.
-2. Unzip it and drag `LiteTick.app` into Applications.
-3. Try to open it once. If macOS blocks it, open System Settings → Privacy & Security, choose Open Anyway in Security, and confirm.
+- Only override macOS security when the archive came from this repository and its SHA-256 checksum matches the release manifest. See [Apple's safety guidance](https://support.apple.com/en-us/102445).
 
-Only override macOS security when the archive came from this repository and its SHA-256 checksum matches the release manifest. See [Apple's safety guidance](https://support.apple.com/en-us/102445).
-
-完整的安装、升级、数据路径、迁移和卸载说明见 [安装与数据指南](docs/install-and-data.md)。
-
-See [Install and data guide](docs/install-and-data.md) for upgrades, storage, migration, and complete removal.
+- 完整的安装、升级、数据路径、迁移和卸载说明见 [安装与数据指南](docs/install-and-data.md)。
+- See [Install and data guide](docs/install-and-data.md) for upgrades, storage, migration, and complete removal.
 
 ## 使用 / Use
 
