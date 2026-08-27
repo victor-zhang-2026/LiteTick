@@ -6,9 +6,15 @@ Floating Desktop Checklist. Native macOS, local storage, no account, and no netw
 
 ## 当前版本 / Current release
 
-`1.0.0-rc.1` 是首个公开候选版本，面向 Apple 芯片 Mac，要求 macOS 14 或更高版本。当前下载包采用临时本地签名，尚未经过 Apple Developer ID 签名或公证。
+`1.0.0` 是首个正式版本，面向 Apple 芯片 Mac，要求 macOS 14 或更高版本。当前下载包采用临时本地签名，尚未经过 Apple Developer ID 签名或公证。
 
-`1.0.0-rc.1` is the first public release candidate for Apple silicon Macs running macOS 14 or later. The current download uses ad-hoc local signing and is not yet signed with Developer ID or notarized by Apple.
+[下载 LiteTick 1.0.0（Apple 芯片 Mac）](https://github.com/victor-zhang-2026/LiteTick/releases/download/v1.0.0/LiteTick-1.0.0-macOS-arm64.zip)
+
+—
+
+`1.0.0` is the first stable release for Apple silicon Macs running macOS 14 or later. The current download uses ad-hoc local signing and is not yet signed with Developer ID or notarized by Apple.
+
+[Download LiteTick 1.0.0 for Apple silicon Mac](https://github.com/victor-zhang-2026/LiteTick/releases/download/v1.0.0/LiteTick-1.0.0-macOS-arm64.zip)
 
 ## 功能 / Features
 
@@ -28,16 +34,16 @@ Floating Desktop Checklist. Native macOS, local storage, no account, and no netw
 
 ## 安装 / Install
 
-- 从 GitHub Releases 下载 `LiteTick-1.0.0-rc.1-macOS-arm64.zip`。
-- 解压后，将 `LiteTick.app` 拖入“应用程序”。
+- 点击上方下载链接获取 `LiteTick-1.0.0-macOS-arm64.zip`。不要下载 GitHub 自动提供的 `Source code`，也不要使用 `Code → Download ZIP`。
+- Safari 可能自动解压；Finder 也可能只显示 `LiteTick` 而隐藏 `.app` 后缀。将该应用拖入“应用程序”。
 - 尝试打开一次。如果 macOS 阻止运行，请打开“系统设置 → 隐私与安全性”，在“安全性”区域选择“仍要打开”，再次确认。
 - 仅当压缩包来自本仓库，且其 SHA-256 校验值与发布清单一致时，才绕过 macOS 安全限制。参见 [Apple 安全指南](https://support.apple.com/zh-cn/102445)。
 - 完整的安装、升级、数据路径、迁移和卸载说明见 [安装与数据指南](docs/install-and-data.md)。
 
 —
 
-- Download `LiteTick-1.0.0-rc.1-macOS-arm64.zip` from GitHub Releases.
-- Unzip it and drag `LiteTick.app` into Applications.
+- Use the download link above to get `LiteTick-1.0.0-macOS-arm64.zip`. Do not download GitHub's automatic `Source code` archives or use `Code → Download ZIP`.
+- Safari may unzip it automatically, and Finder may display the app as `LiteTick` without the `.app` extension. Drag the app into Applications.
 - Try to open it once. If macOS blocks it, open System Settings → Privacy & Security, choose Open Anyway in Security, and confirm.
 - Only override macOS security when the archive came from this repository and its SHA-256 checksum matches the release manifest. See [Apple's safety guidance](https://support.apple.com/en-us/102445).
 - See [Install and data guide](docs/install-and-data.md) for upgrades, storage, migration, and complete removal.
