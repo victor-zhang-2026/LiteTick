@@ -6,6 +6,12 @@ The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-09-04
+
+### Fixed
+
+- Allowed the floating trigger to move to any connected display, remain fully visible when released, and restore its saved secondary-display position on the next launch.
+
 ## [1.0.0] - 2026-08-27
 
 ### Added

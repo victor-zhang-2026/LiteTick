@@ -26,6 +26,8 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
     // The visible ball remains 42 pt; the extra transparent space prevents its circular shadow from clipping.
     private let triggerSize = NSSize(width: 48, height: 48)
     private let panelSize = NSSize(width: 360, height: 480)
+    private let triggerScreenMargin: CGFloat = 8
+    private let panelScreenMargin: CGFloat = 12
     private let panelTransitionDuration: TimeInterval = 0.12
     // Some conferencing speaker overlays sit above the screen-saver level. Use the
     // system's high assistive-overlay level without entering cursor-reserved levels.
@@ -101,20 +103,20 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
     }
 
     func moveTrigger(by translation: CGSize, ended: Bool) {
-        guard let screen = screenContainingTrigger() ?? NSScreen.main else { return }
-        let frame = screen.visibleFrame
         let current = triggerPanel.frame.origin
         let proposed = NSPoint(x: current.x + translation.width, y: current.y - translation.height)
-        let clamped = NSPoint(
-            x: min(max(proposed.x, frame.minX + 8), frame.maxX - triggerSize.width - 8),
-            y: min(max(proposed.y, frame.minY + 8), frame.maxY - triggerSize.height - 8)
-        )
-        triggerPanel.setFrameOrigin(clamped)
-        if ended {
-            UserDefaults.standard.set(Double(clamped.x), forKey: "triggerX")
-            UserDefaults.standard.set(Double(clamped.y), forKey: "triggerY")
-            if isOpen { positionListPanel() }
-        }
+        triggerPanel.setFrameOrigin(proposed)
+        guard ended else { return }
+
+        let proposedFrame = NSRect(origin: proposed, size: triggerSize)
+        guard let screen = screenContaining(NSEvent.mouseLocation)
+            ?? screenBestMatching(proposedFrame)
+            ?? NSScreen.main else { return }
+        let settled = constrainedTriggerOrigin(proposed, to: screen)
+        triggerPanel.setFrameOrigin(settled)
+        UserDefaults.standard.set(Double(settled.x), forKey: "triggerX")
+        UserDefaults.standard.set(Double(settled.y), forKey: "triggerY")
+        if isOpen { positionListPanel() }
     }
 
     func quit() { NSApplication.shared.terminate(nil) }
@@ -289,18 +291,67 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
         guard let screen = screenContainingTrigger() ?? NSScreen.main else { return }
         let visible = screen.visibleFrame
         let trigger = triggerPanel.frame
-        let spaceOnLeft = trigger.minX - visible.minX
-        let x = spaceOnLeft >= panelSize.width
+        let spaceOnLeft = trigger.minX - visible.minX - panelScreenMargin
+        let spaceOnRight = visible.maxX - trigger.maxX - panelScreenMargin
+        let proposedX = spaceOnLeft >= panelSize.width || spaceOnLeft >= spaceOnRight
             ? trigger.minX - panelSize.width
             : trigger.maxX
+        let x = min(
+            max(proposedX, visible.minX + panelScreenMargin),
+            visible.maxX - panelSize.width - panelScreenMargin
+        )
         let centeredY = trigger.midY - panelSize.height / 2
-        let y = min(max(centeredY, visible.minY + 12), visible.maxY - panelSize.height - 12)
+        let y = min(
+            max(centeredY, visible.minY + panelScreenMargin),
+            visible.maxY - panelSize.height - panelScreenMargin
+        )
         listPanel.setFrame(NSRect(x: x, y: y, width: panelSize.width, height: panelSize.height), display: true)
     }
 
     private func screenContainingTrigger() -> NSScreen? {
         let center = NSPoint(x: triggerPanel.frame.midX, y: triggerPanel.frame.midY)
-        return NSScreen.screens.first { NSMouseInRect(center, $0.frame, false) }
+        return screenContaining(center) ?? screenBestMatching(triggerPanel.frame)
+    }
+
+    private func screenContaining(_ point: NSPoint) -> NSScreen? {
+        NSScreen.screens.first { NSMouseInRect(point, $0.frame, false) }
+    }
+
+    private func screenBestMatching(_ windowFrame: NSRect) -> NSScreen? {
+        let screensByIntersection = NSScreen.screens.map { screen in
+            let intersection = windowFrame.intersection(screen.frame)
+            return (screen: screen, area: intersection.width * intersection.height)
+        }
+        if let best = screensByIntersection.max(by: { $0.area < $1.area }), best.area > 0 {
+            return best.screen
+        }
+
+        let center = NSPoint(x: windowFrame.midX, y: windowFrame.midY)
+        return NSScreen.screens.min { lhs, rhs in
+            squaredDistance(from: center, to: lhs.frame) < squaredDistance(from: center, to: rhs.frame)
+        }
+    }
+
+    private func squaredDistance(from point: NSPoint, to rect: NSRect) -> CGFloat {
+        let closestX = min(max(point.x, rect.minX), rect.maxX)
+        let closestY = min(max(point.y, rect.minY), rect.maxY)
+        let dx = point.x - closestX
+        let dy = point.y - closestY
+        return dx * dx + dy * dy
+    }
+
+    private func constrainedTriggerOrigin(_ origin: NSPoint, to screen: NSScreen) -> NSPoint {
+        let frame = screen.visibleFrame
+        return NSPoint(
+            x: min(
+                max(origin.x, frame.minX + triggerScreenMargin),
+                frame.maxX - triggerSize.width - triggerScreenMargin
+            ),
+            y: min(
+                max(origin.y, frame.minY + triggerScreenMargin),
+                frame.maxY - triggerSize.height - triggerScreenMargin
+            )
+        )
     }
 
     private func savedTriggerOrigin() -> NSPoint {
@@ -309,10 +360,10 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
         if UserDefaults.standard.object(forKey: "triggerX") != nil {
             let x = CGFloat(UserDefaults.standard.double(forKey: "triggerX"))
             let y = CGFloat(UserDefaults.standard.double(forKey: "triggerY"))
-            return NSPoint(
-                x: min(max(x, frame.minX + 8), frame.maxX - triggerSize.width - 8),
-                y: min(max(y, frame.minY + 8), frame.maxY - triggerSize.height - 8)
-            )
+            let savedOrigin = NSPoint(x: x, y: y)
+            let savedFrame = NSRect(origin: savedOrigin, size: triggerSize)
+            let targetScreen = screenBestMatching(savedFrame) ?? screen
+            return constrainedTriggerOrigin(savedOrigin, to: targetScreen)
         }
         return NSPoint(x: frame.maxX - triggerSize.width - 10, y: frame.midY - triggerSize.height / 2)
     }
