@@ -90,13 +90,15 @@ The Windows stable release is `1.1.0` for Windows 10 and later on x64, distribut
 
 ## 隐私 / Privacy
 
-任务以未加密 JSON 明文保存在当前 Mac 用户目录中。请勿保存密码、支付卡号、身份证件号码或其他高度敏感信息。完整边界见 [隐私说明](docs/privacy.md)。
+任务以未加密 JSON 明文保存在当前 macOS 或 Windows 用户的本地目录中。请勿保存密码、支付卡号、身份证件号码或其他高度敏感信息。完整边界见 [隐私说明](docs/privacy.md)。
 
-Tasks are stored as unencrypted plaintext JSON in the current Mac user's directory. Do not store passwords, payment-card numbers, government identifiers, or other highly sensitive information. See [Privacy](docs/privacy.md).
+—
+
+Tasks are stored as unencrypted plaintext JSON in the current macOS or Windows user's local directory. Do not store passwords, payment-card numbers, government identifiers, or other highly sensitive information. See [Privacy](docs/privacy.md).
 
 ## 从源码构建 / Build from source
 
-需要 macOS 14 SDK 和 Swift 6。
+macOS 需要 macOS 14 SDK 和 Swift 6：
 
 ```bash
 cd apps/macos
@@ -105,9 +107,40 @@ cd apps/macos
 
 详细规则见 [macOS 开发说明](apps/macos/README.md)与[版本制度](docs/versioning.md)。
 
+Windows 需要 .NET 10 SDK：
+
+```powershell
+cd apps\windows
+.\scripts\build.ps1
+```
+
+详细规则见 [Windows 开发说明](apps/windows/README.md)。
+
+—
+
+macOS requires the macOS 14 SDK and Swift 6:
+
+```bash
+cd apps/macos
+./scripts/build-app.sh  # reserves a new public build number
+```
+
+See the [macOS development guide](apps/macos/README.md) and [versioning policy](docs/versioning.md).
+
+Windows requires the .NET 10 SDK:
+
+```powershell
+cd apps\windows
+.\scripts\build.ps1
+```
+
+See the [Windows development guide](apps/windows/README.md).
+
 ## 共创 / Contributing
 
 欢迎缺陷报告、文档修正和符合产品边界的代码贡献。请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。安全问题请按 [SECURITY.md](SECURITY.md) 私下报告。
+
+—
 
 Bug reports, documentation fixes, and code contributions within the product boundary are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) first. Report security issues privately as described in [SECURITY.md](SECURITY.md).
 
