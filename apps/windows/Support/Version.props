@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <MarketingVersion>1.1.0</MarketingVersion>
+    <BuildNumber>12</BuildNumber>
+    <ReleaseChannel>stable</ReleaseChannel>
+    <Version>$(MarketingVersion)</Version>
+    <AssemblyVersion>$(MarketingVersion).0</AssemblyVersion>
+    <FileVersion>$(MarketingVersion).$(BuildNumber)</FileVersion>
+    <InformationalVersion>$(MarketingVersion)+build.$(BuildNumber).$(ReleaseChannel)</InformationalVersion>
+  </PropertyGroup>
+</Project>

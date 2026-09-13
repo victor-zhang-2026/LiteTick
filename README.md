@@ -1,18 +1,22 @@
 # 妥了 LiteTick
 
-桌面悬浮待办。macOS 原生、本地保存、无需账号、无需联网。
+桌面悬浮待办。支持 macOS 与 Windows，本地保存、无需账号、无需联网。
 
-Floating Desktop Checklist. Native macOS, local storage, no account, and no network required.
+Floating Desktop Checklist for macOS and Windows, with local storage, no account, and no network required.
 
 ## 当前版本 / Current release
 
-`1.0.1` 是当前正式版本，面向 Apple 芯片 Mac，要求 macOS 14 或更高版本。当前下载包采用临时本地签名，尚未经过 Apple Developer ID 签名或公证。
+Windows 正式版为 `1.1.0`，支持 Windows 10 及以上 x64 系统，提供免安装单文件 EXE。macOS 正式版为 `1.0.1`，支持 Apple 芯片 Mac 和 macOS 14 或更高版本。
+
+[下载 LiteTick 1.1.0（Windows 10/11 x64 免安装版）](https://github.com/victor-zhang-2026/LiteTick/releases/download/v1.1.0/LiteTick-1.1.0-Windows-x64.exe)
 
 [下载 LiteTick 1.0.1（Apple 芯片 Mac）](https://github.com/victor-zhang-2026/LiteTick/releases/download/v1.0.1/LiteTick-1.0.1-macOS-arm64.zip)
 
 —
 
-`1.0.1` is the current stable release for Apple silicon Macs running macOS 14 or later. The current download uses ad-hoc local signing and is not yet signed with Developer ID or notarized by Apple.
+The Windows stable release is `1.1.0` for Windows 10 and later on x64, distributed as one portable EXE with no installer. The macOS stable release remains `1.0.1` for Apple silicon Macs running macOS 14 or later.
+
+[Download LiteTick 1.1.0 for Windows 10/11 x64](https://github.com/victor-zhang-2026/LiteTick/releases/download/v1.1.0/LiteTick-1.1.0-Windows-x64.exe)
 
 [Download LiteTick 1.0.1 for Apple silicon Mac](https://github.com/victor-zhang-2026/LiteTick/releases/download/v1.0.1/LiteTick-1.0.1-macOS-arm64.zip)
 
@@ -35,6 +39,22 @@ Floating Desktop Checklist. Native macOS, local storage, no account, and no netw
 - Local-only data with no accounts, sync, analytics, advertising, or telemetry.
 
 ## 安装 / Install
+
+### Windows
+
+- 下载 `LiteTick-1.1.0-Windows-x64.exe`，保存到你希望长期放置的位置后直接打开；无需安装器、管理员权限或额外运行库。
+- 如果 Microsoft Defender SmartScreen 阻止首次启动，请先确认文件来自本仓库的 `v1.1.0` Release，且 SHA-256 与发布页一致，再选择“更多信息 → 仍要运行”。请勿关闭 SmartScreen，也不要忽略其他来源文件的安全警告。
+- 每个 Windows 用户的数据独立保存在 `%LOCALAPPDATA%\LiteTick`，通常是 `C:\Users\<用户名>\AppData\Local\LiteTick`。按 `Win + R`，输入 `%LOCALAPPDATA%\LiteTick` 可直接打开。
+- 完全删除时，先退出妥了，删除 EXE，再删除当前用户的 `%LOCALAPPDATA%\LiteTick` 文件夹；需要立即永久清除时再清空回收站。
+
+—
+
+- Download `LiteTick-1.1.0-Windows-x64.exe`, place it where you want to keep it, and open it directly. No installer, administrator access, or additional runtime is required.
+- If Microsoft Defender SmartScreen blocks the first launch, continue through `More info` → `Run anyway` only after confirming that the file came from this repository's `v1.1.0` Release and its SHA-256 matches the published value. Do not disable SmartScreen or ignore warnings for files from other sources.
+- Each Windows account stores independent data under `%LOCALAPPDATA%\LiteTick`, normally `C:\Users\<user-name>\AppData\Local\LiteTick`. Press `Win + R` and enter `%LOCALAPPDATA%\LiteTick` to open it.
+- For complete removal, quit LiteTick, delete the EXE, and delete the current user's `%LOCALAPPDATA%\LiteTick` folder. Empty the Recycle Bin if immediate permanent removal is intended.
+
+### macOS
 
 - 点击上方下载链接获取 `LiteTick-1.0.1-macOS-arm64.zip`。不要下载 GitHub 自动提供的 `Source code`，也不要使用 `Code → Download ZIP`。
 - Safari 可能自动解压；Finder 也可能只显示 `LiteTick` 而隐藏 `.app` 后缀。将该应用拖入“应用程序”。

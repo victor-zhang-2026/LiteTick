@@ -2,8 +2,13 @@
 .swiftpm/
 apps/macos/.build/
 apps/macos/build/
+apps/windows/.tools/
+apps/windows/**/bin/
+apps/windows/**/obj/
+apps/windows/build/
 release/**/*.zip
 release/**/*.app/
+release/**/*.exe
 
 # Local Codex project memory and historical workspace views
 AGENTS.md

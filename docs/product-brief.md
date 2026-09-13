@@ -9,7 +9,7 @@ The product brand is **妥了 LiteTick**.
 ## Core behavior
 
 ### macOS
-1. A circular green floating ball with one centered white checkmark appears near the right edge by default without covering active work; the user can drag it anywhere within the current screen.
+1. A circular green floating ball with one centered white checkmark appears near the right edge by default without covering active work; the user can drag it anywhere on any connected screen.
 2. Hovering expands the floating panel immediately.
 3. The panel opens in a neutral browsing state; clicking the input begins capture.
 4. Return saves the item at the top of the unfinished list.
@@ -27,9 +27,13 @@ The product brand is **妥了 LiteTick**.
 16. A Hover-only panel auto-collapses after pointer exit. Clicking or typing engages it; `×` or an external left/right click dismisses it and leaves the floating trigger running. The application quits from the trigger's bilingual context menu or `Command-Q`, with a native confirmation.
 
 ### Windows (post-v1)
-1. Preserve the same single-list model and local-only privacy boundary.
-2. Adapt lightweight capture to native Windows interaction conventions.
-3. Require no account, server, or synchronization.
+1. Preserve the same single-list model, local-only privacy boundary, bilingual identity, and Light/Dark appearances.
+2. Use a circular always-on-top floating trigger that opens on Hover, engages on click, moves freely across connected displays, and restores its saved position.
+3. Keep the panel in the trigger's display work area and preserve transient, click-engaged, session-lock, Close, and confirmed-Quit behavior using native Windows conventions.
+4. Support capture, single-click editing, completion and restoration, one fixed top item, handle-based reordering, Completed search, individual deletion, and confirmed search-scoped or complete deletion.
+5. Store tasks, one last-valid backup, and preferences as local plaintext JSON under `%LOCALAPPDATA%\LiteTick`.
+6. Require no account, server, synchronization, analytics, advertising, telemetry, administrator access, installer, or separately installed runtime.
+7. Ship the self-contained x64 `LiteTick.exe` for Windows 10 and later. Windows 7 is outside the maintained, tested, and released product scope.
 
 ## Data principle
 

@@ -6,6 +6,17 @@ The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-09-14
+
+### Added
+
+- Initial local-only Windows counterpart with a multi-display floating trigger, bilingual Light/Dark checklist, task capture and editing, completion and restoration, one pinned item, drag reordering, Completed search and deletion, local backup recovery, and self-contained single-file x64 packaging.
+
+### Changed
+
+- Scoped official Windows maintenance and releases to Windows 10 and later; the earlier Windows 7 compatibility build remains historical source and is excluded from builds, QA, and distribution.
+- Aligned Windows branding, bilingual controls, Light/Dark styling, confirmation dialogs, floating-trigger behavior, and checklist presentation with the established macOS product experience.
+
 ## [1.0.1] - 2026-09-04
 
 ### Fixed

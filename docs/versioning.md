@@ -20,6 +20,8 @@ LiteTick is an external product. Every distributed application bundle must have 
 
 Do not add editable version values back to `Support/Info.plist`. The build script injects version metadata into the generated bundle and verifies the result after signing.
 
+`apps/windows/Support/Version.props` is the corresponding sole editable Windows version source. Windows builds use the same SemVer and release-channel meanings with their own monotonically increasing build sequence. `apps/windows/scripts/build.ps1` is the native release build entry point; `build-cross.sh` produces a macOS cross-built PE candidate for structural inspection.
+
 ## Version meaning
 
 - `0.y.z` — initial development; behavior and stored-data contracts may still change.
@@ -66,6 +68,8 @@ Before any artifact is distributed:
 5. Confirm signing/notarization, privacy text, migration behavior, supported macOS version, checksums, and release notes.
 6. Obtain explicit user approval before publishing, tagging, deploying, or creating external release resources.
 
+For Windows, apply the same gate using `apps/windows/Support/Version.props`, build the accepted x64 EXE, run core and PE verification, record SHA-256, confirm native Windows acceptance for every claimed Windows version, and obtain explicit publication approval.
+
 Git tags will use `vMAJOR.MINOR.PATCH` for stable releases and a SemVer prerelease suffix for prereleases after Git is explicitly initialized. No Git action is implied by this policy.
 
 ## Required records
@@ -75,4 +79,3 @@ Git tags will use `vMAJOR.MINOR.PATCH` for stable releases and a SemVer prerelea
 - `decision.md` — rationale and trade-offs.
 - `release/` — local release procedures and, later, explicitly approved release manifests.
 - Hosted release notes — derived from the matching changelog entry, never used as the sole historical record.
-
