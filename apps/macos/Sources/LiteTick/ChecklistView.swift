@@ -313,6 +313,7 @@ private struct TaskRow: View {
             } label: {
                 Image(systemName: checked ? "checkmark.square.fill" : "square")
                     .font(.system(size: 17)).foregroundStyle(checked ? Color.liteTickGreen : Color.secondary)
+                    .frame(height: 24)
             }.buttonStyle(.plain)
             if editing {
                 EndFocusedTextField(text: $draft, onCommit: commitEdit, onBlur: commitEdit)
@@ -557,6 +558,7 @@ private struct CompletedRow: View {
                 Image(systemName: "checkmark.square.fill")
                     .font(.system(size: 17))
                     .foregroundStyle(Color.liteTickGreen)
+                    .frame(height: 24)
             }
             .buttonStyle(.plain)
             .help(L10n.restoreToList)

@@ -6,6 +6,14 @@ The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+### Fixed
+
+- Vertically centered macOS task completion controls with single-line task text while preserving top alignment for wrapped tasks.
+
+### Documentation
+
+- Clarified that `Command-Q` is a macOS quit shortcut.
+
 ## [1.1.0] - 2026-09-14
 
 ### Added
