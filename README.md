@@ -77,7 +77,7 @@ The Windows stable release is `1.1.0` for Windows 10 and later on x64, distribut
 - 点击事项文字直接编辑；使用右侧手柄拖动排序。
 - 点击方形勾选框完成事项；在“已完成”中再次点击可恢复。
 - 点击面板可临时保持打开；工具栏图钉可在本次运行期间固定面板。
-- macOS：右键悬浮入口可退出；也可使用 `Command-Q`，退出前会再次确认。
+- 右键悬浮入口可退出，退出前会再次确认。macOS 也可使用 `Command-Q`。
 
 —
 
@@ -86,7 +86,7 @@ The Windows stable release is `1.1.0` for Windows 10 and later on x64, distribut
 - Click item text to edit it; drag the handle on the right to reorder.
 - Click the square checkbox to complete an item; click it again in Completed to restore it.
 - Click the panel to keep it open temporarily; use the toolbar pin to keep it fixed for the current run.
-- macOS: Right-click the floating trigger to quit, or use `Command-Q`. LiteTick always asks for confirmation first.
+- Right-click the floating trigger to quit; LiteTick asks for confirmation first. On macOS, you can also use `Command-Q`.
 
 ## 隐私 / Privacy
 
