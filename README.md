@@ -6,19 +6,19 @@ Floating Desktop Checklist for macOS and Windows, with local storage, no account
 
 ## 当前版本 / Current release
 
-Windows 正式版为 `1.1.0`，支持 Windows 10 及以上 x64 系统，提供免安装单文件 EXE。macOS 正式版为 `1.0.1`，支持 Apple 芯片 Mac 和 macOS 14 或更高版本。
+Windows 正式版为 `1.1.0`，支持 Windows 10 及以上 x64 系统，提供免安装单文件 EXE。macOS 正式版为 `1.1.1`，支持 Apple 芯片 Mac 和 macOS 14 或更高版本。
 
 [下载 LiteTick 1.1.0（Windows 10/11 x64 免安装版）](https://github.com/victor-zhang-2026/LiteTick/releases/download/v1.1.0/LiteTick-1.1.0-Windows-x64.exe)
 
-[下载 LiteTick 1.0.1（Apple 芯片 Mac）](https://github.com/victor-zhang-2026/LiteTick/releases/download/v1.0.1/LiteTick-1.0.1-macOS-arm64.zip)
+[下载 LiteTick 1.1.1（Apple 芯片 Mac）](https://github.com/victor-zhang-2026/LiteTick/releases/download/v1.1.1/LiteTick-1.1.1-macOS-arm64.zip)
 
 —
 
-The Windows stable release is `1.1.0` for Windows 10 and later on x64, distributed as one portable EXE with no installer. The macOS stable release remains `1.0.1` for Apple silicon Macs running macOS 14 or later.
+The Windows stable release is `1.1.0` for Windows 10 and later on x64, distributed as one portable EXE with no installer. The macOS stable release is `1.1.1` for Apple silicon Macs running macOS 14 or later.
 
 [Download LiteTick 1.1.0 for Windows 10/11 x64](https://github.com/victor-zhang-2026/LiteTick/releases/download/v1.1.0/LiteTick-1.1.0-Windows-x64.exe)
 
-[Download LiteTick 1.0.1 for Apple silicon Mac](https://github.com/victor-zhang-2026/LiteTick/releases/download/v1.0.1/LiteTick-1.0.1-macOS-arm64.zip)
+[Download LiteTick 1.1.1 for Apple silicon Mac](https://github.com/victor-zhang-2026/LiteTick/releases/download/v1.1.1/LiteTick-1.1.1-macOS-arm64.zip)
 
 ## 功能 / Features
 
@@ -56,7 +56,7 @@ The Windows stable release is `1.1.0` for Windows 10 and later on x64, distribut
 
 ### macOS
 
-- 点击上方下载链接获取 `LiteTick-1.0.1-macOS-arm64.zip`。不要下载 GitHub 自动提供的 `Source code`，也不要使用 `Code → Download ZIP`。
+- 点击上方下载链接获取 `LiteTick-1.1.1-macOS-arm64.zip`。不要下载 GitHub 自动提供的 `Source code`，也不要使用 `Code → Download ZIP`。
 - Safari 可能自动解压；Finder 也可能只显示 `LiteTick` 而隐藏 `.app` 后缀。将该应用拖入“应用程序”。
 - 尝试打开一次。如果 macOS 阻止运行，请打开“系统设置 → 隐私与安全性”，在“安全性”区域选择“仍要打开”，再次确认。
 - 仅当压缩包来自本仓库，且其 SHA-256 校验值与发布清单一致时，才绕过 macOS 安全限制。参见 [Apple 安全指南](https://support.apple.com/zh-cn/102445)。
@@ -64,7 +64,7 @@ The Windows stable release is `1.1.0` for Windows 10 and later on x64, distribut
 
 —
 
-- Use the download link above to get `LiteTick-1.0.1-macOS-arm64.zip`. Do not download GitHub's automatic `Source code` archives or use `Code → Download ZIP`.
+- Use the download link above to get `LiteTick-1.1.1-macOS-arm64.zip`. Do not download GitHub's automatic `Source code` archives or use `Code → Download ZIP`.
 - Safari may unzip it automatically, and Finder may display the app as `LiteTick` without the `.app` extension. Drag the app into Applications.
 - Try to open it once. If macOS blocks it, open System Settings → Privacy & Security, choose Open Anyway in Security, and confirm.
 - Only override macOS security when the archive came from this repository and its SHA-256 checksum matches the release manifest. See [Apple's safety guidance](https://support.apple.com/en-us/102445).

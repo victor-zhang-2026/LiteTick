@@ -12,9 +12,9 @@
 
 ## 安装 / Install
 
-- 从 [GitHub Release](https://github.com/victor-zhang-2026/LiteTick/releases/tag/v1.0.0) 下载 `LiteTick-1.0.0-macOS-arm64.zip`。不要下载 GitHub 自动提供的 `Source code`，也不要使用 `Code → Download ZIP`。
+- 从 [GitHub Release](https://github.com/victor-zhang-2026/LiteTick/releases/tag/v1.1.1) 下载 `LiteTick-1.1.1-macOS-arm64.zip`。不要下载 GitHub 自动提供的 `Source code`，也不要使用 `Code → Download ZIP`。
 - LiteTick 不使用安装器。Safari 可能自动解压，Finder 也可能隐藏 `.app` 后缀。将显示为 `LiteTick` 或 `LiteTick.app` 的应用拖入 `/Applications` 即可。
-- `1.0.0` 尚未使用 Apple Developer ID 签名或公证。首次尝试打开后，如 macOS 阻止运行，请按以下步骤处理：
+- 当前 macOS 版本尚未使用 Apple Developer ID 签名或公证。首次尝试打开后，如 macOS 阻止运行，请按以下步骤处理：
 - 打开“系统设置 → 隐私与安全性”。
 - 在“安全性”区域选择“仍要打开”。
 - 再次确认打开。
@@ -22,9 +22,9 @@
 
 —
 
-- Download `LiteTick-1.0.0-macOS-arm64.zip` from the [GitHub Release](https://github.com/victor-zhang-2026/LiteTick/releases/tag/v1.0.0). Do not download GitHub's automatic `Source code` archives or use `Code → Download ZIP`.
+- Download `LiteTick-1.1.1-macOS-arm64.zip` from the [GitHub Release](https://github.com/victor-zhang-2026/LiteTick/releases/tag/v1.1.1). Do not download GitHub's automatic `Source code` archives or use `Code → Download ZIP`.
 - LiteTick does not use an installer. Safari may unzip the archive automatically, and Finder may hide the `.app` extension. Drag the app shown as `LiteTick` or `LiteTick.app` into `/Applications`.
-- `1.0.0` is not yet signed with Apple Developer ID or notarized. After the first blocked launch attempt, do this:
+- The current macOS release is not yet signed with Apple Developer ID or notarized. After the first blocked launch attempt, do this:
 - Open System Settings → Privacy & Security.
 - In Security, choose Open Anyway.
 - Confirm Open.

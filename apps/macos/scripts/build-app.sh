@@ -13,10 +13,11 @@ cd "$project_dir"
 marketing_version="$("$plist_buddy" -c 'Print :MarketingVersion' "$version_file")"
 build_number="$("$plist_buddy" -c 'Print :BuildNumber' "$version_file")"
 release_channel="$("$plist_buddy" -c 'Print :ReleaseChannel' "$version_file")"
+release_bin_dir="$(swift build -c release --show-bin-path)"
 swift build -c release
 
 mkdir -p "$contents_dir/MacOS" "$contents_dir/Resources"
-cp ".build/release/LiteTick" "$contents_dir/MacOS/LiteTick"
+cp "$release_bin_dir/LiteTick" "$contents_dir/MacOS/LiteTick"
 cp "Support/Info.plist" "$contents_dir/Info.plist"
 cp "Support/LiteTick.icns" "$contents_dir/Resources/LiteTick.icns"
 cp "Support/LiteTickAlertIcon.png" "$contents_dir/Resources/LiteTickAlertIcon.png"

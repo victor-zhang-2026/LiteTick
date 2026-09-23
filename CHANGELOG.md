@@ -6,9 +6,13 @@ The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-09-23
+
 ### Fixed
 
 - Vertically centered macOS task completion controls with single-line task text while preserving top alignment for wrapped tasks.
+- Returned the unlocked macOS checklist to normal window ordering, so another application can cover it after focus moves away; the explicit panel lock still keeps it above other windows.
+- Made macOS packaging resolve SwiftPM's current release binary directory instead of assuming the legacy `.build/release` path.
 
 ### Documentation
 
