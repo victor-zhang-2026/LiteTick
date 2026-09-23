@@ -17,6 +17,7 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
     private var isListHovered = false
     private var isPinned = false
     private var mouseMonitor: Any?
+    private var outsideClickMonitor: Any?
     private var isAppearanceTransitioning = false
     private var aboutWindowController: AboutWindowController?
     private(set) var isOpen = false
@@ -54,7 +55,6 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
     func dismissPanel() {
         if isPanelLocked {
             isPanelLocked = false
-            updateListPanelLevel()
         }
         isPinned = false
         closePanel()
@@ -74,7 +74,6 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
     @discardableResult
     func togglePanelLock() -> Bool {
         isPanelLocked.toggle()
-        updateListPanelLevel()
         if isPanelLocked {
             isPinned = true
             cancelClose()
@@ -180,7 +179,7 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
             backing: .buffered,
             defer: false
         )
-        prepare(triggerPanel, level: Self.alwaysOnTopLevel)
+        prepare(triggerPanel)
         triggerPanel.becomesKeyOnlyIfNeeded = true
         triggerPanel.hasShadow = false
         let triggerView = FloatingBallView(controller: self)
@@ -195,7 +194,7 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
             backing: .buffered,
             defer: false
         )
-        prepare(listPanel, level: .normal)
+        prepare(listPanel)
         listPanel.hasShadow = true
         listPanel.delegate = self
         listPanel.contentView = NSHostingView(rootView: ChecklistView(store: store, controller: self))
@@ -212,20 +211,23 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
             }
             return event
         }
+        outsideClickMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
+            Task { @MainActor in
+                guard let self, self.isPinned, !self.isPanelLocked else { return }
+                self.listPanel.makeFirstResponder(nil)
+                self.dismissPanel()
+            }
+        }
     }
 
-    private func prepare(_ panel: NSPanel, level: NSWindow.Level) {
-        panel.level = level
+    private func prepare(_ panel: NSPanel) {
+        panel.level = Self.alwaysOnTopLevel
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
         panel.animationBehavior = .none
         panel.isOpaque = false
         panel.backgroundColor = .clear
         panel.hidesOnDeactivate = false
         panel.isReleasedWhenClosed = false
-    }
-
-    private func updateListPanelLevel() {
-        listPanel.level = isPanelLocked ? Self.alwaysOnTopLevel : .normal
     }
 
     private func openPanel(activate: Bool) {
