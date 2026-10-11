@@ -4,7 +4,10 @@ import Observation
 @MainActor
 @Observable
 final class TaskStore {
-    private(set) var items: [TaskItem] = []
+    private(set) var items: [TaskItem] = [] {
+        didSet { onUnfinishedCountChanged?(items.count { !$0.isCompleted }) }
+    }
+    @ObservationIgnored var onUnfinishedCountChanged: ((Int) -> Void)?
     var recentlyCompletedID: UUID?
 
     private let fileURL: URL

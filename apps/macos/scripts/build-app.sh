@@ -13,7 +13,11 @@ cd "$project_dir"
 marketing_version="$("$plist_buddy" -c 'Print :MarketingVersion' "$version_file")"
 build_number="$("$plist_buddy" -c 'Print :BuildNumber' "$version_file")"
 release_channel="$("$plist_buddy" -c 'Print :ReleaseChannel' "$version_file")"
-swift build -c release
+build_args=(-c release)
+if [[ -n "${LITETICK_MACOS_SDK:-}" ]]; then
+    build_args+=(--sdk "$LITETICK_MACOS_SDK")
+fi
+swift build "${build_args[@]}"
 
 mkdir -p "$contents_dir/MacOS" "$contents_dir/Resources"
 cp ".build/release/LiteTick" "$contents_dir/MacOS/LiteTick"

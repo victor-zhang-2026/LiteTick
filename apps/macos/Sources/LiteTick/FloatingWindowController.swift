@@ -41,6 +41,9 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
         // Pinning is deliberately session-only. Clear preferences left by earlier prototype builds.
         UserDefaults.standard.removeObject(forKey: "panelLocked")
         configurePanels()
+        store.onUnfinishedCountChanged = { [weak self] count in
+            (self?.triggerPanel.contentView as? FloatingBallView)?.pendingCount = count
+        }
     }
 
     func showTrigger() {
@@ -183,6 +186,7 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
         triggerPanel.becomesKeyOnlyIfNeeded = true
         triggerPanel.hasShadow = false
         let triggerView = FloatingBallView(controller: self)
+        triggerView.pendingCount = store.items.count { !$0.isCompleted }
         triggerView.wantsLayer = true
         triggerView.layer?.backgroundColor = NSColor.clear.cgColor
         triggerView.layer?.isOpaque = false

@@ -6,6 +6,12 @@ The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-11
+
+### Added
+
+- Show the number of unfinished tasks on the macOS floating trigger, with room for two digits and a `99+` display above 99.
+
 ### Fixed
 
 - Vertically centered macOS task completion controls with single-line task text while preserving top alignment for wrapped tasks.

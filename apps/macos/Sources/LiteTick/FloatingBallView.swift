@@ -8,6 +8,7 @@ final class FloatingBallView: NSView {
     private var mouseDownPoint: NSPoint?
     private var lastDragPoint: NSPoint?
     private var didDrag = false
+    var pendingCount = 0 { didSet { needsDisplay = true } }
 
     init(controller: FloatingWindowController) {
         self.controller = controller
@@ -68,6 +69,38 @@ final class FloatingBallView: NSView {
         check.line(to: NSPoint(x: bounds.width * 0.70, y: bounds.height * 0.66))
         NSColor.white.setStroke()
         check.stroke()
+
+        if pendingCount > 0 {
+            let label = pendingCount > 99 ? "99+" : String(pendingCount)
+            let font = NSFont.systemFont(ofSize: label.count > 2 ? 8 : 10, weight: .bold)
+            let attributes: [NSAttributedString.Key: Any] = [
+                .font: font,
+                .foregroundColor: NSColor.white
+            ]
+            let labelSize = (label as NSString).size(withAttributes: attributes)
+            let badgeHeight: CGFloat = 17
+            let badgeWidth = max(badgeHeight, ceil(labelSize.width) + 8)
+            let badgeRect = NSRect(
+                x: bounds.maxX - badgeWidth - 1,
+                y: bounds.maxY - badgeHeight - 1,
+                width: badgeWidth,
+                height: badgeHeight
+            )
+            let badge = NSBezierPath(roundedRect: badgeRect, xRadius: badgeHeight / 2, yRadius: badgeHeight / 2)
+            let badgeShadow = NSShadow()
+            badgeShadow.shadowColor = NSColor.black.withAlphaComponent(0.24)
+            badgeShadow.shadowBlurRadius = 3
+            badgeShadow.shadowOffset = NSSize(width: 0, height: -1)
+            NSGraphicsContext.saveGraphicsState()
+            badgeShadow.set()
+            NSColor(calibratedRed: 1, green: 0.23, blue: 0.19, alpha: 1).setFill()
+            badge.fill()
+            NSGraphicsContext.restoreGraphicsState()
+            (label as NSString).draw(
+                at: NSPoint(x: badgeRect.midX - labelSize.width / 2, y: badgeRect.midY - labelSize.height / 2 + 1),
+                withAttributes: attributes
+            )
+        }
     }
 
     override func mouseEntered(with event: NSEvent) {

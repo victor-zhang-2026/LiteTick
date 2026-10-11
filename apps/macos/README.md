@@ -17,6 +17,8 @@ open build/LiteTick.app
 
 The build uses `io.github.victor-zhang-2026.litetick` and `Application Support/LiteTick`. Every packaged build reserves a new monotonically increasing build number, injects version metadata, signs ad hoc, and verifies bundle identity. Failed builds may leave intentional build-number gaps.
 
+On a Command Line Tools-only Mac where the macOS 27 SDK lacks the SwiftUI macro plugin, use the installed macOS 26.5 SDK: `LITETICK_MACOS_SDK=/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk ./scripts/build-app.sh`.
+
 ## Release gate
 
 Set the version and channel only through `Support/Version.plist` using `scripts/version.sh`, create the matching dated changelog section, build the final candidate, and run:
