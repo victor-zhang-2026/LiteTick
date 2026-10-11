@@ -12,6 +12,8 @@ struct ChecklistView: View {
     @State private var dropAtEnd = false
     @State private var taskRowFrames: [UUID: CGRect] = [:]
     @State private var deleteCandidate: TaskItem?
+    @State private var bulkDeleteRequest: BulkDeleteRequest?
+    @State private var completedSearch = ""
     @State private var languageVersion = UUID()
     @State private var panelLockVersion = UUID()
     @AppStorage("appAppearance") private var appearanceRawValue = AppearanceMode.light.rawValue
@@ -24,17 +26,39 @@ struct ChecklistView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color.liteTickSurface)
+                .fill(appearanceMode == .dark ? Color(red: 30 / 255, green: 30 / 255, blue: 30 / 255) : .white)
 
             VStack(spacing: 0) {
                 header
                 Divider().opacity(0.45)
-                if showingHistory { HistoryView(store: store, deleteCandidate: $deleteCandidate) }
+                if showingHistory {
+                    HistoryView(
+                        store: store,
+                        search: $completedSearch,
+                        onDelete: {
+                            inputFocused = false
+                            controller.setDeletionConfirmationActive(true)
+                            deleteCandidate = $0
+                        },
+                        onDeleteAll: { ids, isFiltered in
+                            inputFocused = false
+                            controller.setDeletionConfirmationActive(true)
+                            bulkDeleteRequest = BulkDeleteRequest(ids: ids, isFiltered: isFiltered)
+                        }
+                    )
+                }
                 else { listContent }
             }
             .id(languageVersion)
             .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+
+            if deleteCandidate != nil || bulkDeleteRequest != nil {
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(.black.opacity(appearanceMode == .dark ? 0.48 : 0.24))
+                deletionConfirmation
+            }
         }
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         .preferredColorScheme(appearanceMode.colorScheme)
         .onHover(perform: controller.listHoverChanged)
         .onChange(of: input) { oldValue, newValue in
@@ -46,13 +70,52 @@ struct ChecklistView: View {
         .onReceive(NotificationCenter.default.publisher(for: .liteTickPanelDidOpen)) { _ in
             inputFocused = false
         }
-        .alert(L10n.deleteTitle, isPresented: Binding(
-            get: { deleteCandidate != nil },
-            set: { if !$0 { deleteCandidate = nil } }
-        ), presenting: deleteCandidate) { item in
-            Button(L10n.cancel, role: .cancel) { deleteCandidate = nil }
-            Button(L10n.delete, role: .destructive) { store.delete(item.id); deleteCandidate = nil }
-        } message: { _ in Text(L10n.deleteMessage) }
+    }
+
+    private var deletionConfirmation: some View {
+        VStack(spacing: 16) {
+            Text(bulkDeleteRequest.map { $0.isFiltered ? L10n.deleteResultsTitle : L10n.deleteAllTitle } ?? L10n.deleteTitle)
+                .font(.system(size: 16, weight: .semibold))
+                .multilineTextAlignment(.center)
+            Text(bulkDeleteRequest.map { $0.isFiltered ? L10n.deleteResultsMessage : L10n.deleteAllMessage } ?? L10n.deleteMessage)
+                .font(.system(size: 13))
+                .multilineTextAlignment(.center)
+            HStack(spacing: 8) {
+                Button(L10n.cancel) { cancelDeletion() }
+                    .keyboardShortcut(.cancelAction)
+                    .foregroundStyle(Color.liteTickPrimaryText)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 30)
+                    .background(Color.liteTickSeparator.opacity(0.35), in: Capsule())
+                Button(bulkDeleteRequest.map { $0.isFiltered ? L10n.deleteResults : L10n.deleteAll } ?? L10n.delete) {
+                    confirmDeletion()
+                }
+                .foregroundStyle(Color.red)
+                .frame(maxWidth: .infinity)
+                .frame(height: 30)
+                .background(Color.red.opacity(0.16), in: Capsule())
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(18)
+        .frame(width: 280)
+        .background(Color.liteTickElevated, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .shadow(color: .black.opacity(0.18), radius: 20, y: 8)
+    }
+
+    private func cancelDeletion() {
+        deleteCandidate = nil
+        bulkDeleteRequest = nil
+        controller.setDeletionConfirmationActive(false)
+    }
+
+    private func confirmDeletion() {
+        if let deleteCandidate { store.delete(deleteCandidate.id) }
+        if let bulkDeleteRequest {
+            store.deleteCompleted(bulkDeleteRequest.ids)
+            completedSearch = ""
+        }
+        cancelDeletion()
     }
 
     private var header: some View {
@@ -60,6 +123,7 @@ struct ChecklistView: View {
             if showingHistory {
                 Button {
                     showingHistory = false
+                    completedSearch = ""
                     inputFocused = false
                 } label: {
                     Image(systemName: "chevron.left")
@@ -224,7 +288,11 @@ struct ChecklistView: View {
             onToggle: { store.toggle(item.id) },
             onEdit: { store.updateText(item.id, text: $0) },
             onTogglePinned: { store.togglePinned(item.id) },
-            onDelete: { deleteCandidate = item },
+            onDelete: {
+                inputFocused = false
+                controller.setDeletionConfirmationActive(true)
+                deleteCandidate = item
+            },
             onReorderChanged: item.isPinned ? nil : { location in
                 updateReorder(item.id, at: location)
             },
@@ -460,13 +528,16 @@ private struct EndFocusedTextField: NSViewRepresentable {
     }
 }
 
+private struct BulkDeleteRequest {
+    let ids: Set<UUID>
+    let isFiltered: Bool
+}
+
 private struct HistoryView: View {
     @Bindable var store: TaskStore
-    @Binding var deleteCandidate: TaskItem?
-    @State private var search = ""
-    @State private var showingDeleteAllConfirmation = false
-    @State private var deletionTargetIDs: Set<UUID> = []
-    @State private var deletingSearchResults = false
+    @Binding var search: String
+    let onDelete: (TaskItem) -> Void
+    let onDeleteAll: (Set<UUID>, Bool) -> Void
 
     private var results: [TaskItem] {
         let query = search.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -487,9 +558,7 @@ private struct HistoryView: View {
                     .tint(Color.liteTickGreen)
                 if !results.isEmpty {
                     Button(hasSearch ? L10n.deleteResults : L10n.deleteAll) {
-                        deletionTargetIDs = Set(results.map(\.id))
-                        deletingSearchResults = hasSearch
-                        showingDeleteAllConfirmation = true
+                        onDeleteAll(Set(results.map(\.id)), hasSearch)
                     }
                         .buttonStyle(.plain)
                         .font(.system(size: 11))
@@ -517,22 +586,12 @@ private struct HistoryView: View {
                                 item: item,
                                 dateText: item.completedAt.map(formattedDate),
                                 onRestore: { store.toggle(item.id) },
-                                onDelete: { deleteCandidate = item }
+                                onDelete: { onDelete(item) }
                             )
                         }
                     }.padding(.horizontal, 12).padding(.bottom, 12)
                 }
             }
-        }
-        .alert(deletingSearchResults ? L10n.deleteResultsTitle : L10n.deleteAllTitle, isPresented: $showingDeleteAllConfirmation) {
-            Button(L10n.cancel, role: .cancel) {}
-            Button(deletingSearchResults ? L10n.deleteResults : L10n.deleteAll, role: .destructive) {
-                store.deleteCompleted(deletionTargetIDs)
-                deletionTargetIDs = []
-                search = ""
-            }
-        } message: {
-            Text(deletingSearchResults ? L10n.deleteResultsMessage : L10n.deleteAllMessage)
         }
     }
 

@@ -6,6 +6,13 @@ The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-10-11
+
+### Fixed
+
+- Restored the established light and dark macOS panel surfaces on macOS 27 and kept deletion confirmations inside the panel's rounded corners.
+- Kept the unfinished-count badge visible through repeated panel openings and closings.
+
 ## [1.2.0] - 2026-10-11
 
 ### Added

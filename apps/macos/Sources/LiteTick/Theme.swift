@@ -41,7 +41,6 @@ extension Color {
             : NSColor(red: 214 / 255, green: 245 / 255, blue: 227 / 255, alpha: 1)
     })
 
-    static let liteTickSurface = Color(nsColor: .windowBackgroundColor)
     static let liteTickElevated = Color(nsColor: .controlBackgroundColor)
     static let liteTickSeparator = Color(nsColor: .separatorColor)
     static let liteTickPrimaryText = Color(nsColor: .labelColor)

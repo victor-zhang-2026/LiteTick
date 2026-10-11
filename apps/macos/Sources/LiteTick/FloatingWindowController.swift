@@ -19,6 +19,7 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
     private var mouseMonitor: Any?
     private var outsideClickMonitor: Any?
     private var isAppearanceTransitioning = false
+    private var isDeletionConfirmationActive = false
     private var aboutWindowController: AboutWindowController?
     private(set) var isOpen = false
     private(set) var isPanelLocked = false
@@ -42,13 +43,14 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
         UserDefaults.standard.removeObject(forKey: "panelLocked")
         configurePanels()
         store.onUnfinishedCountChanged = { [weak self] count in
-            (self?.triggerPanel.contentView as? FloatingBallView)?.pendingCount = count
+            self?.updateTriggerCount(count)
         }
     }
 
     func showTrigger() {
         positionTrigger(at: savedTriggerOrigin())
         triggerPanel.orderFrontRegardless()
+        updateTriggerCount(store.items.count { !$0.isCompleted })
     }
 
     func togglePanel() {
@@ -135,6 +137,11 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
         aboutWindowController?.refresh()
     }
 
+    func setDeletionConfirmationActive(_ active: Bool) {
+        isDeletionConfirmationActive = active
+        if active { cancelClose() }
+    }
+
     func transitionAppearance(_ change: @escaping @MainActor () -> Void) {
         guard !isAppearanceTransitioning, let contentView = listPanel.contentView else { return }
         let bounds = contentView.bounds
@@ -217,7 +224,7 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
         }
         outsideClickMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
             Task { @MainActor in
-                guard let self, self.isPinned, !self.isPanelLocked else { return }
+                guard let self, self.isPinned, !self.isPanelLocked, !self.isDeletionConfirmationActive else { return }
                 self.listPanel.makeFirstResponder(nil)
                 self.dismissPanel()
             }
@@ -259,6 +266,7 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
         NotificationCenter.default.post(name: .liteTickPanelWillClose, object: nil)
         listPanel.makeFirstResponder(nil)
         isOpen = false
+        updateTriggerCount(store.items.count { !$0.isCompleted })
         NSAnimationContext.runAnimationGroup({ context in
             context.duration = panelTransitionDuration
             context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
@@ -272,10 +280,16 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
         })
     }
 
+    private func updateTriggerCount(_ count: Int) {
+        guard let triggerView = triggerPanel.contentView as? FloatingBallView else { return }
+        triggerView.pendingCount = count
+        triggerView.displayIfNeeded()
+    }
+
     private func scheduleClose() {
         cancelClose()
         let work = DispatchWorkItem { [weak self] in
-            guard let self, !self.isPanelLocked, !self.isPinned, !self.isTriggerHovered, !self.isListHovered else { return }
+            guard let self, !self.isDeletionConfirmationActive, !self.isPanelLocked, !self.isPinned, !self.isTriggerHovered, !self.isListHovered else { return }
             self.closePanel()
         }
         closeWorkItem = work
