@@ -81,19 +81,25 @@ struct ChecklistView: View {
                 .font(.system(size: 13))
                 .multilineTextAlignment(.center)
             HStack(spacing: 8) {
-                Button(L10n.cancel) { cancelDeletion() }
-                    .keyboardShortcut(.cancelAction)
-                    .foregroundStyle(Color.liteTickPrimaryText)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 30)
-                    .background(Color.liteTickSeparator.opacity(0.35), in: Capsule())
-                Button(bulkDeleteRequest.map { $0.isFiltered ? L10n.deleteResults : L10n.deleteAll } ?? L10n.delete) {
-                    confirmDeletion()
+                Button { cancelDeletion() } label: {
+                    Text(L10n.cancel)
+                        .foregroundStyle(Color.liteTickPrimaryText)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 30)
+                        .background(Color.liteTickSeparator.opacity(0.35), in: Capsule())
+                        .contentShape(Rectangle())
                 }
-                .foregroundStyle(Color.red)
-                .frame(maxWidth: .infinity)
-                .frame(height: 30)
-                .background(Color.red.opacity(0.16), in: Capsule())
+                .keyboardShortcut(.cancelAction)
+                Button {
+                    confirmDeletion()
+                } label: {
+                    Text(bulkDeleteRequest.map { $0.isFiltered ? L10n.deleteResults : L10n.deleteAll } ?? L10n.delete)
+                        .foregroundStyle(Color.red)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 30)
+                        .background(Color.red.opacity(0.16), in: Capsule())
+                        .contentShape(Rectangle())
+                }
             }
             .buttonStyle(.plain)
         }

@@ -6,6 +6,12 @@ The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-10-28
+
+### Fixed
+
+- Made the entire macOS deletion-confirmation buttons clickable, including the space around Cancel and Delete in both Simplified Chinese and English. Applies to single-item, all-completed, and search-result deletion.
+
 ## [1.2.1] - 2026-10-11
 
 ### Fixed
