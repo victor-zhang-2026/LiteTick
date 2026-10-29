@@ -4,6 +4,12 @@ All notable user-facing changes to LiteTick are documented in this file.
 
 The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/), and version numbers follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.3] - 2026-10-29
+
+### Fixed
+- Preserve display-relative floating-ball positions across clamshell and display changes.
+- Anchor floating-ball dragging to the initial pointer position for reliable external-monitor movement.
+
 ## [Unreleased]
 
 ## [1.2.2] - 2026-10-28

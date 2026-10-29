@@ -6,7 +6,7 @@ final class FloatingBallView: NSView {
     private var trackingAreaRef: NSTrackingArea?
     private var isHovering = false
     private var mouseDownPoint: NSPoint?
-    private var lastDragPoint: NSPoint?
+    private var dragStartOrigin: NSPoint?
     private var didDrag = false
     private let badgeView = PendingBadgeView(frame: .zero)
     var pendingCount = 0 { didSet { updateBadge() } }
@@ -103,25 +103,28 @@ final class FloatingBallView: NSView {
     }
 
     override func mouseDown(with event: NSEvent) {
-        mouseDownPoint = event.locationInWindow
-        lastDragPoint = NSEvent.mouseLocation
+        mouseDownPoint = NSEvent.mouseLocation
+        dragStartOrigin = window?.frame.origin
         didDrag = false
     }
 
     override func mouseDragged(with event: NSEvent) {
-        guard let previous = lastDragPoint else { return }
+        guard let start = mouseDownPoint, let origin = dragStartOrigin else { return }
         let current = NSEvent.mouseLocation
-        let translation = CGSize(width: current.x - previous.x, height: previous.y - current.y)
-        if hypot(current.x - previous.x, current.y - previous.y) > 0.5 { didDrag = true }
-        controller?.moveTrigger(by: translation, ended: false)
-        lastDragPoint = current
+        let dx = current.x - start.x, dy = current.y - start.y
+        if !didDrag && hypot(dx, dy) <= 3 { return }
+        didDrag = true
+        controller?.moveTrigger(to: NSPoint(x: origin.x + dx, y: origin.y + dy), ended: false)
     }
 
     override func mouseUp(with event: NSEvent) {
-        if didDrag { controller?.moveTrigger(by: .zero, ended: true) }
+        if didDrag, let start = mouseDownPoint, let origin = dragStartOrigin {
+            let pointer = NSEvent.mouseLocation
+            controller?.moveTrigger(to: NSPoint(x: origin.x + pointer.x - start.x, y: origin.y + pointer.y - start.y), ended: true)
+        }
         else { controller?.openPinned() }
         mouseDownPoint = nil
-        lastDragPoint = nil
+        dragStartOrigin = nil
         didDrag = false
     }
 

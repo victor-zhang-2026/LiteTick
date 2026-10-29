@@ -25,3 +25,6 @@ apps/ios/
 shared/
 design/prototypes/
 design/brand/hover-list-logo-concepts-v1.png
+
+# Local build backups and verification evidence
+/build/

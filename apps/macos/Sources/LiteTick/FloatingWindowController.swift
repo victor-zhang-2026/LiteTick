@@ -9,6 +9,8 @@ extension Notification.Name {
 @MainActor
 final class FloatingWindowController: NSObject, NSWindowDelegate {
     private let store: TaskStore
+    private let floatingPlacement = FloatingPlacement()
+    private var draggingTrigger = false
     private var triggerPanel: FloatingPanel!
     private var listPanel: FloatingPanel!
     private var openWorkItem: DispatchWorkItem?
@@ -42,13 +44,14 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
         // Pinning is deliberately session-only. Clear preferences left by earlier prototype builds.
         UserDefaults.standard.removeObject(forKey: "panelLocked")
         configurePanels()
+        NotificationCenter.default.addObserver(self, selector: #selector(screensChanged), name: NSApplication.didChangeScreenParametersNotification, object: nil)
         store.onUnfinishedCountChanged = { [weak self] count in
             self?.updateTriggerCount(count)
         }
     }
 
     func showTrigger() {
-        positionTrigger(at: savedTriggerOrigin())
+        floatingPlacement.restore(triggerPanel, fallback: savedTriggerOrigin())
         triggerPanel.orderFrontRegardless()
         updateTriggerCount(store.items.count { !$0.isCompleted })
     }
@@ -91,7 +94,7 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
     func scheduleOpen() {
         isTriggerHovered = true
         cancelClose()
-        guard !isOpen else { return }
+        guard !isOpen, !draggingTrigger else { return }
         openWorkItem?.cancel()
         openPanel(activate: true)
     }
@@ -107,9 +110,9 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
         hovering ? cancelClose() : scheduleClose()
     }
 
-    func moveTrigger(by translation: CGSize, ended: Bool) {
-        let current = triggerPanel.frame.origin
-        let proposed = NSPoint(x: current.x + translation.width, y: current.y - translation.height)
+    func moveTrigger(to proposed: NSPoint, ended: Bool) {
+        draggingTrigger = !ended
+        openWorkItem?.cancel(); cancelClose()
         triggerPanel.setFrameOrigin(proposed)
         guard ended else { return }
 
@@ -121,7 +124,17 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
         triggerPanel.setFrameOrigin(settled)
         UserDefaults.standard.set(Double(settled.x), forKey: "triggerX")
         UserDefaults.standard.set(Double(settled.y), forKey: "triggerY")
+        floatingPlacement.remember(triggerPanel)
         if isOpen { positionListPanel() }
+    }
+
+    @objc private func screensChanged() {
+        floatingPlacement.afterScreenChange { [weak self] in
+            guard let self, !self.draggingTrigger else { return }
+            self.floatingPlacement.restore(self.triggerPanel, fallback: self.savedTriggerOrigin())
+            if self.isOpen { self.positionListPanel() }
+            self.triggerPanel.orderFrontRegardless()
+        }
     }
 
     func quit() { NSApplication.shared.terminate(nil) }
@@ -289,7 +302,7 @@ final class FloatingWindowController: NSObject, NSWindowDelegate {
     private func scheduleClose() {
         cancelClose()
         let work = DispatchWorkItem { [weak self] in
-            guard let self, !self.isDeletionConfirmationActive, !self.isPanelLocked, !self.isPinned, !self.isTriggerHovered, !self.isListHovered else { return }
+            guard let self, !self.draggingTrigger, !self.isDeletionConfirmationActive, !self.isPanelLocked, !self.isPinned, !self.isTriggerHovered, !self.isListHovered else { return }
             self.closePanel()
         }
         closeWorkItem = work
